@@ -16,12 +16,9 @@ jest.mock('@/layout/Footer', () => {
 });
 
 describe('Layout Component', () => {
-  it('should render Header, Footer, and main section', () => {
-    render(
-      <Layout>
-        <div>Child component</div>
-      </Layout>
-    );
+  it('should render the Header, Footer, and the main section', () => {
+    const ChildComponent = <div>Child Component</div>;
+    render(<Layout>{ChildComponent}</Layout>);
 
     expect(screen.getByTestId('header')).toBeInTheDocument();
 

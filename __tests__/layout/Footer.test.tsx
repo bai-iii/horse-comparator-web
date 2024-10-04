@@ -6,7 +6,7 @@ describe('Header Component', () => {
     const currentYear = new Date().getFullYear();
     render(<Footer />);
 
-    const footerText = screen.getByText(`Horse Comparator &copy; ${currentYear}`);
+    const footerText = screen.getByText(`Horse Comparator © ${currentYear}`);
     expect(footerText).toBeInTheDocument();
   });
 });
