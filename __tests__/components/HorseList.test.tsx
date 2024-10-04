@@ -1,7 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import HorseList from '@/components/HorseList';
 import { useQuery } from '@tanstack/react-query';
-import { Horse } from '@/types';
 
 jest.mock('@/services/request', () => ({
   getHorses: jest.fn(),
@@ -9,10 +8,6 @@ jest.mock('@/services/request', () => ({
 
 jest.mock('@tanstack/react-query', () => ({
   useQuery: jest.fn(),
-}));
-
-jest.mock('@chakra-ui/icons', () => ({
-  EditIcon: () => <div data-testid="edit-icon" />,
 }));
 
 describe('HorseList Component', () => {
@@ -39,33 +34,37 @@ describe('HorseList Component', () => {
     expect(screen.getByText('Error: Failed to fetch data')).toBeInTheDocument();
   });
 
-  it('should show horse list when successfully fetched', () => {
-    const mockData: Horse[] = [
-      {
-        id: 'mockID',
-        name: 'mockHorse',
-        profile: {
-          favouriteFood: 'Chips',
-          physical: {
-            height: 200,
-            weight: 200,
-          },
-        },
-      },
-    ];
+  const mockHorses = Array.from({ length: 15 }, (_, i) => ({
+    id: `${i + 1}`,
+    name: `Horse ${i + 1}`,
+  }));
 
+  it('renders horse data with pagination', async () => {
     (useQuery as jest.Mock).mockReturnValue({
       isPending: false,
       isError: false,
-      data: mockData,
+      data: mockHorses,
       error: null,
     });
+
     render(<HorseList />);
 
-    expect(screen.getByText('mockHorse')).toBeInTheDocument();
+    // display 10 on first page
+    for (let i = 1; i <= 10; i++) {
+      expect(screen.getByText(`Horse ${i}`)).toBeInTheDocument();
+    }
 
-    expect(screen.getAllByRole('checkbox')).toHaveLength(1);
+    // 11 should be on second page
+    expect(screen.queryByText('Horse 11')).not.toBeInTheDocument();
 
-    expect(screen.getAllByTestId('edit-icon')).toHaveLength(1);
+    fireEvent.click(screen.getByText('Next'));
+
+    // display 5 on first page
+    for (let i = 11; i <= 15; i++) {
+      expect(screen.getByText(`Horse ${i}`)).toBeInTheDocument();
+    }
+
+    // 1 should be on second page
+    expect(screen.queryByText('Horse 1')).not.toBeInTheDocument();
   });
 });

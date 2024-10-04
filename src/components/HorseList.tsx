@@ -1,44 +1,23 @@
-import {
-  TableContainer,
-  Table,
-  Thead,
-  Tr,
-  Tbody,
-  Th,
-  TableColumnHeaderProps,
-  CheckboxGroup,
-  Checkbox,
-  Text,
-  Td,
-} from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
 import { getHorses } from '@/services/request';
-import { EditIcon } from '@chakra-ui/icons';
-import { Horse } from '@/types';
-
-interface HeaderCellProps {
-  label: string;
-}
-
-const HeaderCell = ({ label, ...columnProps }: HeaderCellProps & TableColumnHeaderProps) => {
-  return (
-    <Th position="sticky" top={0} zIndex={2} backgroundColor="#FFF" {...columnProps}>
-      {label}
-    </Th>
-  );
-};
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import HorseTable from '@/components/HorseTable';
+import Pagination from '@/components/Pagination';
 
 const HorseList = () => {
   // fetch horse data
   const {
     isPending,
     isError,
-    data: horses,
+    data: horses = [],
     error,
   } = useQuery({
     queryKey: ['horses'],
     queryFn: () => getHorses(),
   });
+
+  // pagination status
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   // TODO: show a skeleton list for better experience
   if (isPending) {
@@ -50,35 +29,16 @@ const HorseList = () => {
     return <span>Error: {error.message}</span>;
   }
 
+  const HORSE_PER_PAGE = 10;
+  const totalPages = Math.ceil(horses.length / HORSE_PER_PAGE);
+  const startIndex = (currentPage - 1) * HORSE_PER_PAGE;
+  const displayedHorses = horses.slice(startIndex, startIndex + HORSE_PER_PAGE);
+
   return (
-    <TableContainer overflowY="auto">
-      <Table variant="simple" size={['sm', 'md']} layout={['auto', 'fixed']}>
-        <Thead>
-          <Tr>
-            <HeaderCell label="Select" textAlign="center" w="100px" />
-            <HeaderCell label="Name" />
-            <HeaderCell label="Edit" textAlign="center" w="100px" />
-          </Tr>
-        </Thead>
-        <Tbody>
-          <CheckboxGroup>
-            {horses.map((horse: Horse) => (
-              <Tr key={horse.id}>
-                <Td textAlign="center">
-                  <Checkbox value={horse.id} />
-                </Td>
-                <Td w="100%">
-                  <Text noOfLines={1}>{horse.name}</Text>
-                </Td>
-                <Td textAlign="center">
-                  <EditIcon />
-                </Td>
-              </Tr>
-            ))}
-          </CheckboxGroup>
-        </Tbody>
-      </Table>
-    </TableContainer>
+    <>
+      <HorseTable horses={displayedHorses} />
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+    </>
   );
 };
 
