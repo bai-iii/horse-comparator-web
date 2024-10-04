@@ -1,8 +1,8 @@
-interface HorseProfile {
+export interface HorseProfile {
   favouriteFood: string;
   physical: {
-    height: number;
-    weight: number;
+    height: number | null;
+    weight: number | null;
   };
 }
 

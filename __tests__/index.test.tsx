@@ -8,6 +8,13 @@ jest.mock('@/components/HorseList', () => {
   return MockHorseList;
 });
 
+jest.mock('@/components/AddHorse', () => {
+  function MockAddHorse() {
+    return <button data-testid="add-horse">Mock Add Horse</button>;
+  }
+  return MockAddHorse;
+});
+
 describe('Home Page', () => {
   it('should render the HorseList component', () => {
     render(<Home />);
