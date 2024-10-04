@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import HorseTable from '@/components/HorseTable';
 import Pagination from '@/components/Pagination';
+import { Card, CardBody } from '@chakra-ui/card';
 
 const HorseList = () => {
   // fetch horse data
@@ -35,10 +36,12 @@ const HorseList = () => {
   const displayedHorses = horses.slice(startIndex, startIndex + HORSE_PER_PAGE);
 
   return (
-    <>
-      <HorseTable horses={displayedHorses} />
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
-    </>
+    <Card>
+      <CardBody>
+        <HorseTable horses={displayedHorses} />
+        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+      </CardBody>
+    </Card>
   );
 };
 

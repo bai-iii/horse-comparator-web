@@ -52,7 +52,7 @@ const HorseTable = ({ horses }: HorseTableProps) => {
                   <HorseDetailsCollapse horse={horse} />
                 </Td>
                 <Td textAlign="center">
-                  <EditIcon />
+                  <EditIcon role="button" arial-label="Edit Hores" />
                 </Td>
               </Tr>
             ))}
