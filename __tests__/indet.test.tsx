@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import Home from '@/pages';
 
-jest.mock('@/HorseList', () => {
+jest.mock('@/components/HorseList', () => {
   function MockHorseList() {
     return <div data-testid="horse-list">Mock Horse List</div>;
   }
