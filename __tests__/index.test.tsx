@@ -16,10 +16,19 @@ jest.mock('@/components/AddHorse', () => {
 });
 
 describe('Home Page', () => {
-  it('should render the HorseList component', () => {
+  beforeEach(() => {
     render(<Home />);
+  });
 
-    const horseList = screen.getByTestId('horse-list');
-    expect(horseList).toBeInTheDocument();
+  it('should render the welcome message', () => {
+    expect(screen.getByText('Welcome back, Jane Doe')).toBeInTheDocument();
+  });
+
+  it('should render the AddHorse component', () => {
+    expect(screen.getByTestId('add-horse')).toBeInTheDocument();
+  });
+
+  it('should render the HorseList component', () => {
+    expect(screen.getByTestId('horse-list')).toBeInTheDocument();
   });
 });
