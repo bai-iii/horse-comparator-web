@@ -11,8 +11,8 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { Horse } from '@/types';
-import { Text } from '@chakra-ui/layout';
 import { EditIcon } from '@chakra-ui/icons';
+import HorseDetailsCollapse from '@/components/HorseDetailsCollapse';
 
 interface HeaderCellProps {
   label: string;
@@ -42,15 +42,14 @@ const HorseTable = ({ horses }: HorseTableProps) => {
           </Tr>
         </Thead>
         <Tbody>
-          {' '}
           <CheckboxGroup>
             {horses.map((horse: Horse) => (
-              <Tr key={horse.id}>
+              <Tr key={horse.id} _hover={{ bgColor: 'blackAlpha.50' }}>
                 <Td textAlign="center">
                   <Checkbox value={horse.id} />
                 </Td>
-                <Td w="100%" maxW="calc(100% - 100px)">
-                  <Text noOfLines={1}>{horse.name}</Text>
+                <Td w="100%">
+                  <HorseDetailsCollapse horse={horse} />
                 </Td>
                 <Td textAlign="center">
                   <EditIcon />

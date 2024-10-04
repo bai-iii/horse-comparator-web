@@ -6,6 +6,14 @@ jest.mock('@chakra-ui/icons', () => ({
   EditIcon: () => <div data-testid="edit-icon" />,
 }));
 
+jest.mock('@/components/HorseDetailsCollapse', () => {
+  function MockHorseDetailsCollapse({ horse }: { horse: Horse }) {
+    return <div data-testid={`horse-details-${horse.id}`}>{horse.name}</div>;
+  }
+
+  return MockHorseDetailsCollapse;
+});
+
 describe('HorseTable Component', () => {
   const mockHorses: Horse[] = [
     {

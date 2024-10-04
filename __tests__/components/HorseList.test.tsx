@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import HorseList from '@/components/HorseList';
 import { useQuery } from '@tanstack/react-query';
+import { Horse } from '@/types';
 
 jest.mock('@/services/request', () => ({
   getHorses: jest.fn(),
@@ -9,6 +10,14 @@ jest.mock('@/services/request', () => ({
 jest.mock('@tanstack/react-query', () => ({
   useQuery: jest.fn(),
 }));
+
+jest.mock('@/components/HorseDetailsCollapse', () => {
+  function MockHorseDetailsCollapse({ horse }: { horse: Horse }) {
+    return <div data-testid={`horse-details-${horse.id}`}>{horse.name}</div>;
+  }
+
+  return MockHorseDetailsCollapse;
+});
 
 describe('HorseList Component', () => {
   it('should show "Loading..." when fetch the data', () => {
